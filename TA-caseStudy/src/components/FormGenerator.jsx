@@ -2,9 +2,10 @@ import React from 'react';
 import FormField from './FormField';
 import ErrorMessage from './ErrorMessage';
 import useForm from '../hooks/useForm';
+import Strings from '../Constant/Strings';
 
 const FormGenerator = ({ schema }) => {
-  const { formData, errors, handleChange, handleSubmit } = useForm(schema);
+  const { formData, errors, handleChange, handleSubmit, resetForm } = useForm(schema);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -17,8 +18,15 @@ const FormGenerator = ({ schema }) => {
         </div>
       ))}
       <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-        Submit
+        {Strings.actions.SUBMIT}
       </button>
+      <button
+          type="button"
+          onClick={resetForm}
+          className="bg-gray-500 text-white px-4 py-2 rounded ml-2"
+        >
+          {Strings.actions.RESET}
+        </button>
     </form>
   );
 };

@@ -14,6 +14,8 @@ const useForm = (schema) => {
       fieldValue = checked
         ? [...prevValue, value]
         : prevValue.filter((val) => val !== value);
+    } else if (type === 'radio') {
+      fieldValue = value; // For radio buttons, the value is the selected option
     } else if (type === 'file') {
       fieldValue = files[0];
     } else {
@@ -21,7 +23,12 @@ const useForm = (schema) => {
     }
 
     setFormData((prev) => ({ ...prev, [id]: fieldValue }));
-    setErrors((prev) => ({ ...prev, [id]: validateField(schema.fields.find((f) => f.id === id), fieldValue) }));
+
+    // Find the field object from the schema
+    const field = schema.fields.find((f) => f.id === id);
+    if (field) {
+      setErrors((prev) => ({ ...prev, [id]: validateField(field, fieldValue) }));
+    }
   };
 
   const handleSubmit = (e) => {
@@ -38,7 +45,21 @@ const useForm = (schema) => {
     }
   };
 
-  return { formData, errors, handleChange, handleSubmit };
+  // Reset form function
+  const resetForm = () => {
+    const initialFormData = {};
+    schema.fields.forEach((field) => {
+      if (field.type === 'checkbox') {
+        initialFormData[field.id] = []; // Reset checkboxes to an empty array
+      } else {
+        initialFormData[field.id] = ''; // Reset other fields to an empty string
+      }
+    });
+    setFormData(initialFormData);
+    setErrors({});
+  };
+
+  return { formData, errors, handleChange, handleSubmit, resetForm };
 };
 
 export default useForm;

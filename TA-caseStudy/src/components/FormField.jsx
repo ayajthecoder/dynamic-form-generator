@@ -50,6 +50,7 @@ const FormField = ({ field, value, onChange }) => {
               <label key={option.value} className="flex items-center">
                 <input
                   type="radio"
+                  id={field.id}
                   name={field.id}
                   value={option.value}
                   checked={value === option.value}

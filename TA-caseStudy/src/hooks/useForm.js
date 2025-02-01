@@ -1,8 +1,11 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux'; // Import useDispatch
 import { validateField } from '../utils/validators';
+import { setFormData, resetFormData } from '../redux/formSlice'; // Import actions
 
 const useForm = (schema) => {
-  const [formData, setFormData] = useState({});
+  const dispatch = useDispatch(); // Initialize useDispatch
+  const [formData, setFormDataState] = useState({});
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
@@ -22,7 +25,7 @@ const useForm = (schema) => {
       fieldValue = value;
     }
 
-    setFormData((prev) => ({ ...prev, [id]: fieldValue }));
+    setFormDataState((prev) => ({ ...prev, [id]: fieldValue }));
 
     // Find the field object from the schema
     const field = schema.fields.find((f) => f.id === id);
@@ -42,6 +45,7 @@ const useForm = (schema) => {
 
     if (Object.keys(newErrors).length === 0) {
       console.log('Form submitted:', formData);
+      dispatch(setFormData(formData)); // Dispatch the action correctly
     }
   };
 
@@ -55,8 +59,9 @@ const useForm = (schema) => {
         initialFormData[field.id] = ''; // Reset other fields to an empty string
       }
     });
-    setFormData(initialFormData);
+    setFormDataState(initialFormData);
     setErrors({});
+    dispatch(resetFormData()); // Dispatch the action correctly
   };
 
   return { formData, errors, handleChange, handleSubmit, resetForm };

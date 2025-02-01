@@ -1,7 +1,8 @@
 import { createContext, useContext } from "react";
+import Strings from "../Constant/Strings";
 
 export const ThemeContext = createContext({
-    themeMode: "light",
+    themeMode: Strings.themes.LIGHT,
     darkTheme: () => {},
     lightTheme: () => {},
 })

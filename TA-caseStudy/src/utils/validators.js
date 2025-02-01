@@ -1,6 +1,8 @@
+import Strings from "../Constant/Strings";
+
 export const validateField = (field, value) => {
     if (field.required && !value) {
-      return 'This field is required';
+      return Strings.errorMessage.requiredErrorMessage;
     }
   
     if (field.validation) {
@@ -13,7 +15,7 @@ export const validateField = (field, value) => {
       }
   
       if (field.validation.pattern && !new RegExp(field.validation.pattern).test(value)) {
-        return field.validation.message || 'Invalid format';
+        return field.validation.message || Strings.errorMessage.invalidFormat;
       }
     }
   
